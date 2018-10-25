@@ -63,10 +63,14 @@ int main(int argc, char **argv)
 	std::cout << "decltype(r): " << typeid(decltype(r)).name() << std::endl;
 	std::cout << "decltype(r): " << type_id_with_cvr<decltype(r)>().name() << std::endl;
 
-	std::deque<int> d {0};
+	std::deque<int> d{ 0 };
 	access(d, z) = 1;
 	std::cout << "decltype(authAndAccess(d, z)): " << typeid(decltype(access<decltype(d), decltype(z)>)).name() << std::endl;
 	std::cout << "decltype(authAndAccess(d, z)): " << type_id_with_cvr<decltype(access<decltype(d), decltype(z)>)>().name() << std::endl;
+
+	std::vector<bool>b{ true };
+	std::cout << "decltype(b[0]): " << typeid(decltype(b[0])).name() << std::endl;
+	std::cout << "decltype(b[0]): " << type_id_with_cvr<decltype(b[0])>().name() << std::endl;
 
 	return 0;
 }
