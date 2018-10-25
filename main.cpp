@@ -22,9 +22,9 @@ public:
 };
 
 template<typename Container, typename Index>
-auto access(Container& c, Index i) -> decltype(c[i])
+auto access(Container&& c, Index i) -> decltype(std::forward<Container>(c)[i])
 {
-	return c[i];
+	return std::forward<Container>(c)[i];
 }
 
 int main(int argc, char **argv)
@@ -55,6 +55,8 @@ int main(int argc, char **argv)
 	std::deque<int> d {0};
 	access(d, z) = 1;
 	std::cout << "decltype(authAndAccess(d, z)): " << typeid(decltype(access<decltype(d), decltype(z)>)).name() << std::endl;
+
+	//Niestety wyniki std::type_info::name nie sa wiarygodne
 
 	return 0;
 }
