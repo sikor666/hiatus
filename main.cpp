@@ -29,9 +29,46 @@ auto access(Container&& c, Index i) -> decltype(std::forward<Container>(c)[i])
 	return std::forward<Container>(c)[i];
 }
 
+class Base
+{
+public:
+	virtual void doWork() &
+	{
+		std::cout << "Base::doWork &" << std::endl;
+	}
+
+	virtual void doWork() && // funkcja wirtualna klasy bazowej
+	{
+		std::cout << "Base::doWork &&" << std::endl;
+	}
+};
+
+class Derived final : public Base
+{
+public:
+	virtual void doWork() & override
+	{
+		std::cout << "Derived::doWork &" << std::endl;
+	}
+
+	virtual void doWork() && override // nadpisuje funkcjÍ Base::doWork (s≥owo "virtual" jest tu opcjonalne)
+	{
+		std::cout << "Derived::doWork &&" << std::endl;
+	}
+};
+
 int main(int argc, char **argv)
 {
 	using boost::typeindex::type_id_with_cvr;
+
+	// tworzenie wskaünika klasy bazowej do obiektu klasy potomnej;
+	std::unique_ptr<Base> upb =	std::make_unique<Derived>();
+
+	upb->doWork();	// wywo≥anie funkcji doWork za pomocπ
+					// wskaünika klasy bazowej; wywo≥ywana
+					// jest funkcja klasy potomnej
+
+	Derived().doWork();
 
 	auto print = [](const char* s) { std::cout << s << std::endl; };
 	std::for_each(argv, argv + argc, print);
